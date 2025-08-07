@@ -16,14 +16,43 @@ def plot_country_distribution(file_path):
     # Count how many unique countries there are
     num_countries = country_counts.shape[0]
     # Add text before the chart
-    st.markdown("### Diversity of Participants")
     st.write(f"In 2024, we had participants from **{num_countries} countries** on our programmes.")
     # Create pie chart
     fig = px.pie(
         country_counts,
         names='Country',
         values='Count',
-        title='Participants by Country'
+        title='Participants by Nationality'
+    )
+    # Show the chart
+    st.plotly_chart(fig)
+def plot_ethnicity_distribution(file_path):
+    """Displays a pie chart of ethnicity distribution from the CSV."""
+    # Load the CSV
+    df = pd.read_csv(file_path)
+    # --- Calculation for BIPOC percentage ---
+    non_white_participants = df[df['Ethnicity'] != "White"]
+    # Count the number of non-White participants
+    num_bipoc = non_white_participants.shape[0]
+    # Calculate the total number of participants
+    total_participants = df.shape[0]
+    # Calculate the percentage of BIPOC participants
+    percentage_bipoc = (num_bipoc / total_participants) * 100
+    # Add text before the chart
+    st.write(
+        f"**{int(percentage_bipoc)}%** of these participants were"
+        " from Black, Asian or ethnic minority backgrounds." 
+    )
+    # --- Pie chart for ethnicity distribution ---
+    # Group by ethnicity and count occurrences
+    ethnicity_counts = df['Ethnicity'].value_counts().reset_index()
+    ethnicity_counts.columns = ['Ethnicity', 'Count']
+    # Create pie chart
+    fig = px.pie(
+        ethnicity_counts,
+        names='Ethnicity',
+        values='Count',
+        title='Participants by Ethnicity'
     )
     # Show the chart
     st.plotly_chart(fig)
@@ -42,7 +71,10 @@ def plot_confidence_by_school(file_path):
     # Calculate the percentage
     percentage_increased = (num_increased / total_participants) * 100
     # Add text before the chart
-    st.write(f"In 2024, **{int(percentage_increased)}%** of participants felt they had increased in confidence.")
+    st.write(
+        f"In 2024, **{int(percentage_increased)}%** of participants"
+        " felt they had increased in confidence."
+    )
     # Create a grouped bar chart
     fig = px.bar(
         counts,
@@ -63,15 +95,20 @@ def plot_skills_development(file_path):
         return round(series.mean() / 5 * 100, 1)  # scale from 1–5 to percentage
 
     data = {
-        "Skill Area": ["Confidence", "Presentation", "Interview", "CV Development"],
+        "Skill Area": [
+            "Career Awareness", 
+            "Presentation Skills", 
+            "Interview Skills", 
+            "CV Development"
+        ],
         "Before": [
-            scale_to_percent(df["Confidence Before"]),
+            scale_to_percent(df["Career Awareness Before"]),
             scale_to_percent(df["Presentation Before"]),
             scale_to_percent(df["Interview Before"]),
             scale_to_percent(df["CV Development Before"])
         ],
         "After": [
-            scale_to_percent(df["Confidence After"]),
+            scale_to_percent(df["Career Awareness After"]),
             scale_to_percent(df["Presentation After"]),
             scale_to_percent(df["Interview After"]),
             scale_to_percent(df["CV Development After"])
@@ -81,6 +118,12 @@ def plot_skills_development(file_path):
     # Convert to DataFrame for clarity
     results_df = pd.DataFrame(data)
     results_df["Increase"] = results_df["After"] - results_df["Before"]
+
+    #
+    st.write(
+        "We're thrilled to see the percentage increases in all the skills we measure " 
+        "following our Future Skills and Employability Skills pathways." 
+    )
 
     # Create Plotly bar chart
     fig = go.Figure()
@@ -111,7 +154,7 @@ def plot_skills_development(file_path):
 
     # Layout
     fig.update_layout(
-        title="Skill Improvements (Before vs After)",
+        title="Skill Self Assessments (Meaured Before vs After Our Programme)",
         yaxis_title="Average Rating (%)",
         barmode='group',
         yaxis=dict(range=[0, 110])
@@ -132,8 +175,18 @@ st.write(
 # File path to the CSV
 CSV_FILE = 'participants.csv'
 
+st.markdown("### Diversity of Participants")
+
 # Plot nationality pie chart
 plot_country_distribution(CSV_FILE)
+
+st.write(
+        "All participants in our programmes are recipients "
+        "of free school meals."
+    )
+
+# Plot ethnicity pie chart
+plot_ethnicity_distribution(CSV_FILE)
 
 st.markdown("### Skills Development")
 st.write(
