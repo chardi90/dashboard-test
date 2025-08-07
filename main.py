@@ -16,7 +16,10 @@ def plot_country_distribution(file_path):
     # Count how many unique countries there are
     num_countries = country_counts.shape[0]
     # Add text before the chart
-    st.write(f"This year, we had participants from **{num_countries} countries** on our programmes.")
+    st.write(
+        f"This year, we had participants from **{num_countries} "
+        "countries** on our programmes."
+    )
     # Create pie chart
     fig = px.pie(
         country_counts,
@@ -232,3 +235,12 @@ st.write(
 
 # Plot the employment sectors of alumni
 plot_employment_sectors(CSV_FILE)
+
+URL_ONE = "https://www.chardi.co.uk/"
+URL_TWO = "https://github.com/chardi90/dashboard-test/blob/master/main.py"
+URL_THREE = "https://streamlit.io/"
+
+st.write(
+    f"Coded by [Chardi]({URL_ONE}), open-sourced on [GitHub]({URL_TWO}), "
+    f"and hosted on [Streamlit]({URL_THREE})."
+)
