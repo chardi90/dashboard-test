@@ -1,30 +1,30 @@
 
 """CSV Reader for creating a dashboard for data insights."""
-
-import csv
 import pandas as pd
 import plotly.express as px
 
-def organise_participant_data():
-    """Reads participant data CSV and returns formatted strings"""
-    participants = []
+def plot_country_distribution(file_path):
+    """Displays a pie chart of country distribution from the CSV."""
+    # Load the CSV
+    df = pd.read_csv(file_path)
 
-    with open('participants.csv', 'r', encoding="utf-8") as file:
-        participant_data = csv.reader(file)
+    # Group by country and count occurrences
+    country_counts = df['Country'].value_counts().reset_index()
+    country_counts.columns = ['Country', 'Count']
 
-    for row in participant_data:
-        participant_id = row[0]
-        first_name = row[2]
-        last_name = row[3]
-        email = row[9]
-        participants.append(
-            f"Customer #{participant_id}, {first_name} {last_name}, {email}")
+    # Create pie chart
+    fig = px.pie(
+        country_counts,
+        names='Country',
+        values='Count',
+        title='Distribution of People by Country'
+    )
 
-    return participants
+    # Show the chart
+    fig.show()
 
-def display_participant():
-    """Displays participant data"""
-    for participant in organise_participant_data():
-        print(participant)
+# File path to the CSV
+CSV_FILE = 'participants.csv'
 
-display_participant()
+# Plot the distribution
+plot_country_distribution(CSV_FILE)
