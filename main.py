@@ -162,6 +162,30 @@ def plot_skills_development(file_path):
 
     # Streamlit display percentages
     st.plotly_chart(fig)
+def plot_employment_sectors(file_path):
+    """Displays a pie chart of employment sectors from the CSV."""
+    # Load the CSV
+    df = pd.read_csv(file_path)
+    # Group by sector and count occurrences
+    sector_counts = df['Sector'].value_counts().reset_index()
+    sector_counts.columns = ['Sector', 'Count']
+    # Count how many unique sectors there are
+    num_sectors = sector_counts.shape[0]
+    # Add text before the chart
+    st.write(
+        "We surveyed participants who completed our programme 5 years ago "
+        f"and discovered they are currently working across **{num_sectors} sectors** "
+        "in a range of exciting roles. "
+    )
+    # Create pie chart
+    fig = px.pie(
+        sector_counts,
+        names='Sector',
+        values='Count',
+        title='Alumni (by Sector)'
+    )
+    # Show the chart
+    st.plotly_chart(fig)
 st.set_page_config(page_title="Participant Data Impact Report")
 
 st.title("Participant Data Impact Report")
@@ -205,3 +229,6 @@ st.write(
     "Find out where our alumni are now. Five years after completing our programme," 
     " we're thrilled to see what our alumni have achieved."
 )
+
+# Plot the employment sectors of alumni
+plot_employment_sectors(CSV_FILE)
