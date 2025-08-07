@@ -16,7 +16,7 @@ def plot_country_distribution(file_path):
     # Count how many unique countries there are
     num_countries = country_counts.shape[0]
     # Add text before the chart
-    st.write(f"In 2024, we had participants from **{num_countries} countries** on our programmes.")
+    st.write(f"This year, we had participants from **{num_countries} countries** on our programmes.")
     # Create pie chart
     fig = px.pie(
         country_counts,
@@ -72,7 +72,7 @@ def plot_confidence_by_school(file_path):
     percentage_increased = (num_increased / total_participants) * 100
     # Add text before the chart
     st.write(
-        f"In 2024, **{int(percentage_increased)}%** of participants"
+        f"This year, **{int(percentage_increased)}%** of participants"
         " felt they had increased in confidence."
     )
     # Create a grouped bar chart
