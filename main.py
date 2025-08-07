@@ -2,6 +2,7 @@
 """CSV Reader for creating a dashboard for data insights."""
 import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 def plot_country_distribution(file_path):
     """Displays a pie chart of country distribution from the CSV."""
@@ -22,6 +23,11 @@ def plot_country_distribution(file_path):
 
     # Show the chart
     fig.show()
+
+st.set_page_config(page_title="Participant Data")
+
+st.title("Alumni Data Insights")
+st.write("Find out where our alumni are now.")
 
 # File path to the CSV
 CSV_FILE = 'participants.csv'
